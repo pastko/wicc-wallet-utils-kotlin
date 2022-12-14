@@ -4,9 +4,9 @@ import com.waykichain.wallet.base.OperVoteFund
 import com.waykichain.wallet.base.VoteOperType
 import com.waykichain.wallet.base.params.WaykiDelegateTxParams
 import com.waykichain.wallet.impl.LegacyWallet
-import org.bitcoinj.core.ECKey
-import org.bitcoinj.wallet.DeterministicKeyChain
-import org.bitcoinj.wallet.DeterministicSeed
+import org.waykichainj.core.ECKey
+import org.waykichainj.wallet.DeterministicKeyChain
+import org.waykichainj.wallet.DeterministicSeed
 import org.junit.Test
 import org.slf4j.LoggerFactory
 import org.waykichain.wallet.util.BIP44Util

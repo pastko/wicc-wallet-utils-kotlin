@@ -1,20 +1,26 @@
 package com.waykichain.wallet;
 
-import com.waykichain.wallet.base.CoinType;
-import com.waykichain.wallet.base.UCoinDest;
-import com.waykichain.wallet.base.WaykiNetworkType;
-import com.waykichain.wallet.base.params.*;
-import com.waykichain.wallet.impl.LegacyWallet;
-import com.waykichain.wallet.util.ContractUtil;
-import org.bitcoinj.core.DumpedPrivateKey;
-import org.bitcoinj.core.ECKey;
-import org.bitcoinj.core.LegacyAddress;
+import org.waykichainj.core.DumpedPrivateKey;
+import org.waykichainj.core.ECKey;
+import org.waykichainj.core.LegacyAddress;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.waykichain.wallet.util.BIP44Util;
-import org.waykichain.wallet.util.MnemonicUtil;
+import waykichain.wallet.base.CoinType;
+import waykichain.wallet.base.UCoinDest;
+import waykichain.wallet.base.WaykiNetworkType;
+import waykichain.wallet.base.WaykiWallet;
+import waykichain.wallet.base.params.WaykiCommonTxParams;
+import waykichain.wallet.base.params.WaykiTestNetParams;
+import waykichain.wallet.base.params.WaykiUCoinContractTxParams;
+import waykichain.wallet.base.params.WaykiUCoinTxParams;
+import waykichain.wallet.impl.LegacyWallet;
+import waykichain.wallet.util.BIP44Util;
+import waykichain.wallet.util.ContractUtil;
+import waykichain.wallet.util.MnemonicUtil;
 
+
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,7 +33,7 @@ public class TestTx {
     * */
     @Test
     public void generateMnemonic(){
-      List<String> words=MnemonicUtil.Companion.randomMnemonicCodes();
+      List<String> words= new MnemonicUtil().randomMnemonicCodes();
       logger.info(words.toString());
     }
 
@@ -38,9 +44,9 @@ public class TestTx {
     @Test
     public void generateWalletFromMnemonic(){
         String words = "vote despair mind rescue crumble choice garden elite venture cattle oxygen voyage";
-        WaykiTestNetParams networkParameters = WaykiTestNetParams.Companion.getInstance(); //generate Testnet Address From Mnemonic
+        WaykiTestNetParams networkParameters = new WaykiTestNetParams(); //generate Testnet Address From Mnemonic
        // WaykiMainNetParams networkParameters = WaykiMainNetParams.Companion.getInstance(); //generate Mainnet Address From Mnemonic
-        BIP44Util.WaykiWallet wallet= BIP44Util.Companion.generateWaykiWallet(words,networkParameters);
+        WaykiWallet wallet= new BIP44Util().generateWaykiWallet(words,networkParameters);
         logger.info("PrivateKey:"+wallet.getPrivateKey()+"\n"+"Address:"+wallet.getAddress()+"\n"+"PublicKeyKey:"+wallet.getPubKey()+"\n");
     }
 
@@ -49,9 +55,9 @@ public class TestTx {
     * 小费最少0.0001WICC   fee Minimum 0.0001 wicc
     * */
     @Test
-    public void commonTransaction(){
+    public void commonTransaction() throws IOException {
         LegacyWallet wallet =new LegacyWallet();
-        WaykiTestNetParams netParams = WaykiTestNetParams.Companion.getInstance(); // Test net params
+        WaykiTestNetParams netParams = new WaykiTestNetParams(); // Test net params
         String srcPrivKeyWiF = "Y6J4aK6Wcs4A3Ex4HXdfjJ6ZsHpNZfjaS4B9w7xqEnmFEYMqQd13";// private key
         ECKey srcKey = DumpedPrivateKey.fromBase58(netParams, srcPrivKeyWiF).getKey();
         String pubKey = srcKey.getPublicKeyAsHex(); //wallet public key
@@ -70,9 +76,9 @@ public class TestTx {
      * fee Minimum 0.0001 wicc
      * */
     @Test
-    public void  testGenerateUCoinTransferTx() {
+    public void  testGenerateUCoinTransferTx() throws IOException {
         LegacyWallet wallet = new LegacyWallet();
-        WaykiTestNetParams netParams = WaykiTestNetParams.Companion.getInstance();
+        WaykiTestNetParams netParams = new WaykiTestNetParams();
 
         String srcPrivKeyWiF = "Y6J4aK6Wcs4A3Ex4HXdfjJ6ZsHpNZfjaS4B9w7xqEnmFEYMqQd13";
          ECKey  srcKey = DumpedPrivateKey.fromBase58(netParams, srcPrivKeyWiF).getKey();
@@ -101,9 +107,9 @@ public class TestTx {
      * fee Minimum 0.0001 wicc
      * */
     @Test
-    public void testGenerateUCoinContractTx() {
+    public void testGenerateUCoinContractTx() throws IOException {
         LegacyWallet wallet = new LegacyWallet();
-        WaykiTestNetParams netParams = WaykiTestNetParams.Companion.getInstance();
+        WaykiTestNetParams netParams = new WaykiTestNetParams();
 
         String srcPrivKeyWiF = "Y6J4aK6Wcs4A3Ex4HXdfjJ6ZsHpNZfjaS4B9w7xqEnmFEYMqQd13";
         ECKey srcKey = DumpedPrivateKey.fromBase58(netParams, srcPrivKeyWiF).getKey();
@@ -111,7 +117,7 @@ public class TestTx {
 
         Long value = 100000000L;
         String appid = "450687-1";
-        byte[] contractByte = ContractUtil.Companion.hexString2binaryString("f001");
+        byte[] contractByte = new ContractUtil().hexString2binaryString("f001");
         WaykiUCoinContractTxParams txParams = new WaykiUCoinContractTxParams(srcKey.getPrivateKeyAsHex(), 727702,
                 100000, value, "0-1",
                 appid, contractByte, CoinType.WICC.getType(),CoinType.WUSD.getType());

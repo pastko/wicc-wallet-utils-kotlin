@@ -4,10 +4,10 @@ import com.waykichain.wallet.base.*
 import com.waykichain.wallet.base.params.*
 import com.waykichain.wallet.impl.LegacyWallet
 import com.waykichain.wallet.util.ContractUtil
-import org.bitcoinj.core.DumpedPrivateKey
-import org.bitcoinj.core.ECKey
-import org.bitcoinj.core.LegacyAddress
-import org.bitcoinj.core.Utils
+import org.waykichainj.core.DumpedPrivateKey
+import org.waykichainj.core.ECKey
+import org.waykichainj.core.LegacyAddress
+import org.waykichainj.core.Utils
 import org.junit.Test
 import org.slf4j.LoggerFactory
 import java.io.File

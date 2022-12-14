@@ -1,47 +1,33 @@
-buildscript {
-    ext.kotlin_version = '1.2.60'
-    repositories {
-        jcenter()
-        mavenCentral()
-    }
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-//        classpath 'com.android.tools.build:gradle:2.2.0'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7'
-        // This version is dependent on what version of gradle you are running
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
-    }
-
+plugins {
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id 'project-report'
 }
 
 plugins {
     id 'java-library'
-    id 'com.stehno.natives' version '0.3.1'
-    id "com.jfrog.bintray" version "1.7"
-    id 'maven'
     id 'maven-publish'
+    id 'maven'
+    id 'eclipse'
 }
 
 group 'com.waykichain'
 version '2.0'
 
-apply plugin: 'maven-publish'
-apply plugin: 'com.jfrog.bintray'
-apply plugin: "com.stehno.natives"
-apply plugin: "kotlin"
-apply plugin: 'java-library'
+apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
+apply plugin: 'java-library'
 
 // In this section you declare where to find the dependencies of your project
 repositories {
-    jcenter()
     mavenCentral()
+    maven { url "https://jitpack.io" }
 }
 
 jar {
-    baseName = 'wicc-wallet-utils'
-    version = '2.0.8'
+    baseName = 'wicc-walletj'
+    version = '2.1.0'
     manifestContentCharset 'utf-8'
     metadataCharset 'utf-8'
     manifest {
@@ -52,37 +38,32 @@ jar {
         from {
             configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
         }
-
-        exclude "META-INF/*.SF"
-        exclude "META-INF/*.DSA"
-        exclude "META-INF/*.RSA"
     }
 }
 
 dependencies {
     // This dependency is exported to consumers, that is to say found on their compile classpath.
-    api 'org.apache.commons:commons-math3:3.6.1'
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'org.apache.commons:commons-math3:3.6.1'
+    compileOnly 'org.projectlombok:lombok:1.16.12'
+//    annotationProcessor('org.projectlombok:lombok:1.16.12')
 
-    compile group: 'org.web3j', name: 'crypto', version: '3.3.1'
-    compile 'com.madgag.spongycastle:core:1.58.0.0'
-    compile 'com.lambdaworks:scrypt:1.4.0'
-    compile 'com.google.guava:guava:24.0-android'
-    compile 'com.google.protobuf:protobuf-java:3.5.1'
-    compile 'com.squareup.okhttp3:okhttp:3.9.1'
-    compile 'net.jcip:jcip-annotations:1.0'
-    compileOnly 'org.fusesource.leveldbjni:leveldbjni-all:1.8'
-    compile 'com.google.guava:guava:21.0'
-    compile 'org.slf4j:slf4j-api:1.7.25'
+    implementation group: 'org.web3j', name: 'crypto', version: '3.3.1'
+    implementation 'com.madgag.spongycastle:core:1.58.0.0'
+    implementation 'com.lambdaworks:scrypt:1.4.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.9.1'
+    implementation 'net.jcip:jcip-annotations:1.0'
+    runtimeOnly 'org.fusesource.leveldbjni:leveldbjni-all:1.8'
+    implementation group: 'org.fusesource.leveldbjni', name: 'leveldbjni', version: '1.7'
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
+
+    implementation 'com.google.guava:guava:21.0'
+    implementation 'com.google.protobuf:protobuf-java:3.5.1'
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.easymock:easymock:3.2'
     testImplementation 'com.fasterxml.jackson.core:jackson-databind:2.5.2'
     testImplementation 'org.slf4j:slf4j-jdk14:1.7.25'
-    testImplementation 'com.h2database:h2:1.3.167'
     testImplementation 'org.fusesource.leveldbjni:leveldbjni-all:1.8'
-    testImplementation 'junit:junit:4.12'
-    testCompile 'junit:junit:4.12'
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
@@ -101,28 +82,6 @@ publishing {
                 archives sourcesJar
             }
             version this.version
-        }
-    }
-}
-
-bintray {
-    user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
-    key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
-    publications = ['Production']
-    configurations = ['archives']
-    pkg {
-        userOrg = 'waykichain'
-        repo = 'utils'
-        name = 'wicc-wallet-utils'
-        description = "Waykichain Wallet Utils SDK"
-        publicDownloadNumbers = true
-        licenses = ['MIT']
-        vcsUrl = 'https://github.com/WaykiChain/wicc-wallet-utils-kotlin.git'
-        version {
-            name = this.version
-            desc = "wicc-wallet-utils SDK ${this.version}"
-            released = new Date()
-            vcsTag = 'v2.0.8'
         }
     }
 }

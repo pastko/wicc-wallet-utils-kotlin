@@ -25,9 +25,9 @@ import com.waykichain.wallet.base.params.WaykiTestNetParams
 import com.waykichain.wallet.base.params.WaykiVerifyMsgSignParams
 import com.waykichain.wallet.base.types.encodeInOldWay
 import com.waykichain.wallet.impl.LegacyWallet
-import org.bitcoinj.core.*
-import org.bitcoinj.wallet.DeterministicKeyChain
-import org.bitcoinj.wallet.DeterministicSeed
+import org.waykichainj.core.*
+import org.waykichainj.wallet.DeterministicKeyChain
+import org.waykichainj.wallet.DeterministicSeed
 import org.junit.Test
 import org.slf4j.LoggerFactory
 import org.waykichain.wallet.util.BIP44Util
